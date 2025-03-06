@@ -1,0 +1,11 @@
+.book_container {
+  /* margin-top: 22px; */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 1.2rem;
+}
+
+.book_container h3 {
+  margin-bottom: 0px;
+}

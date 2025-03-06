@@ -1,101 +1,69 @@
-import Image from "next/image";
+import BbookItem from "@/components/book-item";
+import style from "./page.module.css";
+import Searchbar from "@/components/searchbar";
+//import { AllBooks, RecommendedBooks } from "@/action/booksAction";
+import { IBook } from "@/types";
+import { Suspense } from "react";
+
+export const dynamic = "";
+// 특정 페이지의 유형을 강제로 Static, Dynamic 페이지로 설정
+
+async function AllBooks() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book`, {
+    cache: "force-cache",
+  });
+  if (!response.ok) {
+    return <div className="p-2 text-[1rem] ">오류가 발생 했습니다.</div>;
+  }
+  const allBooks: IBook[] = await response.json();
+  return (
+    <div>
+      {allBooks.length > 0 ? (
+        allBooks.map((book) => <BbookItem key={book.id} {...book} />)
+      ) : (
+        <span className="p-2 text-[1rem] "> No data ...</span>
+      )}
+    </div>
+  );
+}
+
+async function RecommendedBooks() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/book/random`,
+    { next: { revalidate: 3 } }
+  );
+  if (!response.ok) {
+    return <div className="p-2 text-[1rem] ">오류가 발생 했습니다.</div>;
+  }
+  const ramdomBooks: IBook[] = await response.json();
+  return (
+    <div>
+      {ramdomBooks.length > 0 ? (
+        ramdomBooks.map((book) => <BbookItem key={book.id} {...book} />)
+      ) : (
+        <span className="p-2 text-[1rem] ">오류가 발생 했습니다...</span>
+      )}
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <>
+      <Suspense fallback={<div>Loading …</div>}>
+        <Searchbar />
+      </Suspense>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      <div className={style.book_container}>
+        <section>
+          <h3 className="font-bold pb-2">추천 하는 도서</h3>
+          <RecommendedBooks />
+        </section>
+        <section>
+          <h3 className="font-bold pb-2 pt-2">전체 도서</h3>
+          <AllBooks />
+        </section>
+      </div>
+    </>
   );
 }
