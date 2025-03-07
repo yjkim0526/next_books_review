@@ -1,4 +1,5 @@
 import type { IBook } from "@/types";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function BbookItem(book: IBook) {
@@ -7,7 +8,8 @@ export default function BbookItem(book: IBook) {
       href={`/book/${book.id}`}
       className="flex gap-4 px-5 py-3 border border-gray-100"
     >
-      <img src={book.coverImgUrl} className="w-20" alt="img" />
+      <Image src={book.coverImgUrl} alt="img" width={80} height={105} />
+
       <div className="text-[1rem]">
         <div className="mb-2 font-bold">{book.title}</div>
         <div className="text-slate-500">{book.subTitle}</div>

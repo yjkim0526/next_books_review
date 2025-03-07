@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
       fullUrl: true,
     },
   },
+
+  // 이미지 호스트 추가
+  images: {
+    domains: ["shopping-phinf.pstatic.net"],
+  },
 };
 
 export default nextConfig;

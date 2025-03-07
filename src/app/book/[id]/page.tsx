@@ -3,6 +3,7 @@ import style from "./[id].module.css";
 import { IReview } from "@/types";
 import ReviewItem from "@/components/review-item";
 import { ReviewEditor } from "@/components/review-editor";
+import Image from "next/image";
 
 export function generateStaticParams() {
   return [{ id: "1" }, { id: "2" }, { id: "3" }];
@@ -32,7 +33,12 @@ async function BookDetail({ bookId }: { bookId: string }) {
         className={style.cover_img_container}
         style={{ backgroundImage: `url('${coverImgUrl}')` }}
       >
-        <img src={coverImgUrl} alt="" />
+        <Image
+          src={coverImgUrl}
+          width={200}
+          height={80}
+          alt={`도서 ${title} 표지`}
+        />
       </div>
       <div className="mt-8">
         <div className="font-bold text-xl">{title}</div>
