@@ -1,17 +1,18 @@
 import { notFound } from "next/navigation";
 import style from "./[id].module.css";
+import { IReview } from "@/types";
+import ReviewItem from "@/components/review-item";
+import { ReviewEditor } from "@/components/review-editor";
 
 export function generateStaticParams() {
   return [{ id: "1" }, { id: "2" }, { id: "3" }];
 }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book/${id}`);
+async function BookDetail({ bookId }: { bookId: string }) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/book/${bookId}`,
+    { cache: "force-cache" }
+  );
 
   if (!response.ok) {
     if (response.status === 404) {
@@ -26,7 +27,7 @@ export default async function Page({
     detailBook;
 
   return (
-    <div>
+    <div className="mb-2 flex flex-col gap-4">
       <div
         className={style.cover_img_container}
         style={{ backgroundImage: `url('${coverImgUrl}')` }}
@@ -43,6 +44,43 @@ export default async function Page({
           {description}
         </div>
       </div>
+    </div>
+  );
+}
+
+async function ReviewList({ bookId }: { bookId: string }) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/review/book/${bookId}`,
+    { next: { tags: [`review-${bookId}`] } }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Review fetch failed : ${response.statusText}`);
+  }
+
+  const reviews: IReview[] = await response.json();
+  // console.log(reviews);
+
+  return (
+    <div>
+      {reviews.map((review) => (
+        <ReviewItem key={review.id} {...review} />
+      ))}
+    </div>
+  );
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  return (
+    <div>
+      <BookDetail bookId={id} />
+      <ReviewEditor bookId={id} />
+      <ReviewList bookId={id} />
     </div>
   );
 }

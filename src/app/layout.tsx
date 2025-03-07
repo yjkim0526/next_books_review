@@ -24,8 +24,12 @@ async function Footer() {
   const bookCount = books.length;
   return (
     <footer className="pt-2">
-      <div className="bottom-0 pt-4 pb-4 font-bold text-gray-500 h-14 w-auto lg:w-[70%] ">
-        copyright @koiforever - {bookCount} 개의 도서가 등록되어 있습니다.
+      <div className="bottom-0 font-bold text-gray-500 h-16 w-auto lg:w-[70%] ">
+        copyright @koiforever
+        <br />
+        <span className="text-gray-400 text-sm">
+          {bookCount} 개의 도서가 등록되어 있습니다.
+        </span>
       </div>
     </footer>
   );
@@ -43,7 +47,7 @@ export default function RootLayout({
           <header className="h-16 font-bold text-lg leading-[64px]">
             <Link href={"/"}>📚 Books</Link>
           </header>
-          <main className="pt-3">{children}</main>
+          <main className="pt-3 pb-4">{children}</main>
           <Footer />
         </div>
       </body>

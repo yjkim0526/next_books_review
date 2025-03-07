@@ -7,3 +7,11 @@ export interface IBook {
   description: string;
   coverImgUrl: string;
 }
+
+export interface IReview {
+  id: number;
+  content: string;
+  author: string;
+  createdAt: string;
+  bookId: number;
+}

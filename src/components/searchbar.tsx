@@ -42,7 +42,7 @@ export default function Searchbar() {
       />
       <button
         onClick={onSubmit}
-        className="p-2 bg-blue-500 text-white rounded w-16"
+        className="p-2 bg-blue-500 text-white rounded w-16 cursor-pointer"
       >
         검색
       </button>
