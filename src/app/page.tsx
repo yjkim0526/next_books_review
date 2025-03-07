@@ -4,11 +4,11 @@ import Searchbar from "@/components/searchbar";
 //import { AllBooks, RecommendedBooks } from "@/action/booksAction";
 import { IBook } from "@/types";
 import { Suspense } from "react";
-
-export const dynamic = "";
-// 특정 페이지의 유형을 강제로 Static, Dynamic 페이지로 설정
+import { delay } from "@/util/delay";
+import LoadingPage from "@/components/loading-page";
 
 async function AllBooks() {
+  // await delay(1500);
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book`, {
     cache: "force-cache",
   });
@@ -28,6 +28,7 @@ async function AllBooks() {
 }
 
 async function RecommendedBooks() {
+  // await delay(3000);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/book/random`,
     { next: { revalidate: 3 } }
@@ -47,21 +48,27 @@ async function RecommendedBooks() {
   );
 }
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <>
-      <Suspense fallback={<div>Loading …</div>}>
+      <Suspense fallback={<LoadingPage />}>
         <Searchbar />
       </Suspense>
 
       <div className={style.book_container}>
         <section>
           <h3 className="font-bold pb-2">추천 하는 도서</h3>
-          <RecommendedBooks />
+          <Suspense fallback={<LoadingPage />}>
+            <RecommendedBooks />
+          </Suspense>
         </section>
         <section>
           <h3 className="font-bold pb-2 pt-2">전체 도서</h3>
-          <AllBooks />
+          <Suspense fallback={<LoadingPage />}>
+            <AllBooks />
+          </Suspense>
         </section>
       </div>
     </>

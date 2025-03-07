@@ -1,15 +1,12 @@
 import BbookItem from "@/components/book-item";
+import LoadingPage from "@/components/loading-page";
 import Searchbar from "@/components/searchbar";
 import { IBook } from "@/types";
+import { delay } from "@/util/delay";
 import { Suspense } from "react";
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string }>;
-}) {
-  const { q } = await searchParams;
-
+async function SearchResult({ q }: { q: string }) {
+  // await delay(1500); // 1.5초 동안 지연 (테스트)
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/book/search?q=${q}`,
     { cache: "force-cache" }
@@ -17,7 +14,7 @@ export default async function Page({
   if (!response.ok) {
     return (
       <div>
-        <Suspense fallback={<div>Loading …</div>}>
+        <Suspense fallback={<LoadingPage />}>
           <Searchbar />
         </Suspense>
 
@@ -33,5 +30,20 @@ export default async function Page({
         <BbookItem key={book.id} {...book} />
       ))}
     </div>
+  );
+}
+
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+  //searchParams: { q?: string };
+}) {
+  console.log(">> searchParams -----", searchParams);
+  const { q } = await searchParams;
+  return (
+    <Suspense key={q || ""} fallback={<LoadingPage />}>
+      <SearchResult q={q || ""} />
+    </Suspense>
   );
 }
