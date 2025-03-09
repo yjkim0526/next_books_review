@@ -3,6 +3,7 @@ import LoadingPage from "@/components/loading-page";
 import Searchbar from "@/components/searchbar";
 import { IBook } from "@/types";
 import { delay } from "@/util/delay";
+import { Metadata } from "next";
 import { Suspense } from "react";
 
 async function SearchResult({ q }: { q: string }) {
@@ -31,6 +32,24 @@ async function SearchResult({ q }: { q: string }) {
       ))}
     </div>
   );
+}
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}): Promise<Metadata> {
+  // 동적 메타 데이터
+  const { q } = await searchParams;
+  return {
+    title: `${q} : 책 검색 `,
+    description: `${q}의 책 검색 결과 `,
+    openGraph: {
+      title: `${q} : 책 검색 `,
+      description: `${q}의 책 검색 결과 `,
+      images: ["/book_icon.png"],
+    },
+  };
 }
 
 export default async function Page({

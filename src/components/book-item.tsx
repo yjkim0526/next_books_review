@@ -8,7 +8,12 @@ export default function BbookItem(book: IBook) {
       href={`/book/${book.id}`}
       className="flex gap-4 px-5 py-3 border border-gray-100"
     >
-      <Image src={book.coverImgUrl} alt="img" width={80} height={105} />
+      <Image
+        src={book.coverImgUrl}
+        alt={`도서 표지 이미지`}
+        width={80}
+        height={105}
+      />
 
       <div className="text-[1rem]">
         <div className="mb-2 font-bold">{book.title}</div>

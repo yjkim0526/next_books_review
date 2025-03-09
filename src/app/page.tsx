@@ -6,6 +6,7 @@ import { IBook } from "@/types";
 import { Suspense } from "react";
 import { delay } from "@/util/delay";
 import LoadingPage from "@/components/loading-page";
+import { Metadata } from "next";
 
 async function AllBooks() {
   // await delay(1500);
@@ -49,6 +50,16 @@ async function RecommendedBooks() {
 }
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "추천 도서",
+  description: "추천 도서를 확인하세요",
+  openGraph: {
+    title: "추천 도서",
+    description: "추천 도서를 확인하세요",
+    images: ["/book_icon.png"],
+  },
+};
 
 export default function Home() {
   return (
