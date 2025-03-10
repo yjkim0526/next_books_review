@@ -1,10 +1,8 @@
 import BbookItem from "@/components/book-item";
 import style from "./page.module.css";
 import Searchbar from "@/components/searchbar";
-//import { AllBooks, RecommendedBooks } from "@/action/booksAction";
 import { IBook } from "@/types";
 import { Suspense } from "react";
-import { delay } from "@/util/delay";
 import LoadingPage from "@/components/loading-page";
 import { Metadata } from "next";
 
@@ -49,7 +47,7 @@ async function RecommendedBooks() {
   );
 }
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "추천 도서",
@@ -71,15 +69,11 @@ export default function Home() {
       <div className={style.book_container}>
         <section>
           <h3 className="font-bold pb-2">추천 하는 도서</h3>
-          <Suspense fallback={<LoadingPage />}>
-            <RecommendedBooks />
-          </Suspense>
+          <RecommendedBooks />
         </section>
         <section>
           <h3 className="font-bold pb-2 pt-2">전체 도서</h3>
-          <Suspense fallback={<LoadingPage />}>
-            <AllBooks />
-          </Suspense>
+          <AllBooks />
         </section>
       </div>
     </>

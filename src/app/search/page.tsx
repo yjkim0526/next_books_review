@@ -2,7 +2,6 @@ import BbookItem from "@/components/book-item";
 import LoadingPage from "@/components/loading-page";
 import Searchbar from "@/components/searchbar";
 import { IBook } from "@/types";
-import { delay } from "@/util/delay";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
