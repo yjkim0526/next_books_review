@@ -6,5 +6,5 @@ export default async function Page({
   const { q } = await searchParams;
   // const aboutBooks = await AboutBooks(q);
 
-  return <div></div>;
+  return <div>About </div>;
 }
